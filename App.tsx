@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
-  Linking,
   Image,
   useColorScheme,
   StyleSheet,
@@ -21,6 +20,7 @@ import {
 } from 'react-native-responsive-screen';
 import ContactModal from './Src/Components/ContactModal';
 import CalculatorButton from './Src/Components/CalculatorButton';
+import WebViewScreen from './Src/Screens/WebViewScreen.tsx';
 
 const buttons = [
   ['C', 'π', '√', '^'],
@@ -31,13 +31,19 @@ const buttons = [
   ['0', '.', '=', '+'],
 ];
 
-function CalculatorScreen({ showContactModal, setShowContactModal }) {
+function CalculatorScreen({
+  showContactModal,
+  setShowContactModal,
+}: {
+  showContactModal: boolean;
+  setShowContactModal: (visible: boolean) => void;
+}) {
   const [input, setInput] = useState('');
   const [result, setResult] = useState('');
   const isDark = useColorScheme() === 'dark';
 
   const handlePress = useCallback(
-    btn => {
+    (btn: string) => {
       const functions = ['sin', 'cos', 'tan', 'log', '√'];
       const operators = ['+', '-', '*', '/', '^'];
 
@@ -51,7 +57,7 @@ function CalculatorScreen({ showContactModal, setShowContactModal }) {
         try {
           let expression = input
             .replace(/√/g, 'sqrt')
-            .replace(/π/g, pi)
+            .replace(/π/g, String(pi))
             .replace(/(\d)(π|[a-z(])/g, '$1*$2')
             .replace(/--/g, '+');
 
@@ -63,7 +69,7 @@ function CalculatorScreen({ showContactModal, setShowContactModal }) {
 
           const res = evaluate(expression);
           setResult(res.toString());
-        } catch (error) {
+        } catch (error: any) {
           console.log('Evaluation error:', error.message);
           setResult('Error');
         }
@@ -105,21 +111,32 @@ function CalculatorScreen({ showContactModal, setShowContactModal }) {
   );
 
   const getBtnStyle = useCallback(
-    btn => {
+    (btn: string) => {
       const isOperator = ['+', '-', '*', '/', '=', '^'].includes(btn);
       const isFunction = ['sin', 'cos', 'tan', 'log', '√', 'π'].includes(btn);
       const isClear = btn === 'C';
 
+      // let backgroundColor;
+
+      // if (isClear) {
+      //   backgroundColor = isDark ? '#3D3D5C' : '#D4D4D6';
+      // } else if (isOperator) {
+      //   backgroundColor = '#FF9500';
+      // } else if (isFunction) {
+      //   backgroundColor = isDark ? '#2E2E3A' : '#E1E1E5';
+      // } else {
+      //   backgroundColor = isDark ? '#2E2E3A' : '#fff';
+      // }
       let backgroundColor;
 
       if (isClear) {
-        backgroundColor = isDark ? '#3D3D5C' : '#D4D4D6';
+        backgroundColor = isDark ? '#393E4B' : '#E0E4EC';
       } else if (isOperator) {
-        backgroundColor = '#FF9500';
+        backgroundColor = isDark ? '#0077CC' : '#0077CC';
       } else if (isFunction) {
-        backgroundColor = isDark ? '#2E2E3A' : '#E1E1E5';
+        backgroundColor = isDark ? '#2A2E39' : '#D8DDE7';
       } else {
-        backgroundColor = isDark ? '#2E2E3A' : '#fff';
+        backgroundColor = isDark ? '#2F343F' : '#FFFFFF';
       }
 
       return {
@@ -184,18 +201,18 @@ function CalculatorScreen({ showContactModal, setShowContactModal }) {
   );
 }
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent(props: any) {
   return (
     <DrawerContentScrollView {...props}>
       <TouchableOpacity
         style={styles.drawerItem}
-        onPress={() => props.navigation.navigate('Bellelon Calculator')}
+        onPress={() => props.navigation.navigate('SmartDigits Calculator')}
       >
         <Image
           source={require('../Calcure/Src/Images/calculator.png')}
           style={styles.drawerIcon}
         />
-        <Text style={styles.drawerLabel}>Bellelon Calculator</Text>
+        <Text style={styles.drawerLabel}>SmartDigits Calculator</Text>
       </TouchableOpacity>
 
       <View style={styles.drawerDivider} />
@@ -217,11 +234,65 @@ function CustomDrawerContent(props) {
 
       <TouchableOpacity
         style={styles.drawerItemChat}
-        onPress={() => {
-          Linking.openURL(
-            'https://bellelonlimited.com/privacy-policy-for-bellelon-calculator/',
-          );
-        }}
+        onPress={() =>
+          props.navigation.navigate('PrivacyPolicy', {
+            htmlContent: `
+            <html>
+              <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    color: #000000;
+                  }
+                  h2 {
+                    color: #0077CC;
+                  }
+                  h3 {
+                    margin-top: 20px;
+                  }
+                  p, li {
+                    line-height: 1.6;
+                    font-size: 16px;
+                  }
+                </style>
+              </head>
+              <body>
+                <h2>Privacy Policy for SmartDigits Calculator</h2>
+                <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
+                <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
+                <p><strong>Effective Date:</strong> 29th July, 2025</p>
+                <p>We are committed to protecting your privacy. This Privacy Policy outlines how the SmartDigits Calculator app (“we”, “our”, or “us”) handles your information.</p>
+          
+                <h3>1. Information Collection and Use</h3>
+                <p>We want to assure you that SmartDigits Calculator does not collect, store, or share any personal data from users. Our calculator functions entirely offline and does not require access to your device’s personal information, files, contacts, or location.</p>
+                <ul>
+                  <li>We do not collect personally identifiable information.</li>
+                  <li>We do not use cookies or tracking technologies.</li>
+                  <li>We do not access or store any user content.</li>
+                </ul>
+          
+                <h3>2. Data Security</h3>
+                <p>As we do not collect any personal or sensitive information, no user data is stored on our servers. Your privacy and security are inherently protected through our app’s offline nature.</p>
+          
+                <h3>3. Third-Party Services</h3>
+                <p>The SmartDigits Calculator does not integrate with any third-party services (e.g., analytics tools, ad networks, social platforms). Therefore, no data is shared with external services.</p>
+          
+                <h3>4. Children’s Privacy</h3>
+                <p>Our app does not target children under the age of 13, and we do not knowingly collect any personal data from children.</p>
+          
+                <h3>5. Changes to This Privacy Policy</h3>
+                <p>We may update this Privacy Policy from time to time. Any changes will be posted within the app or on our official website. Continued use of the app after changes are made signifies your acceptance of the updated policy.</p>
+          
+                <h3>6. Contact Us</h3>
+                <p>If you have any questions or concerns regarding this Privacy Policy, please contact us.</p>
+              </body>
+            </html>
+          `, // Replace below
+          })
+        }
       >
         <Image
           source={require('../Calcure/Src/Images/insurance.png')}
@@ -242,7 +313,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Bellelon Calculator"
+        initialRouteName="SmartDigits Calculator"
         drawerContent={props => (
           <CustomDrawerContent
             {...props}
@@ -258,7 +329,7 @@ export default function App() {
           },
         }}
       >
-        <Drawer.Screen name="Bellelon Calculator">
+        <Drawer.Screen name="SmartDigits Calculator">
           {props => (
             <CalculatorScreen
               {...props}
@@ -267,6 +338,11 @@ export default function App() {
             />
           )}
         </Drawer.Screen>
+        <Drawer.Screen
+          name="PrivacyPolicy"
+          component={WebViewScreen}
+          options={{ headerShown: false }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -329,7 +405,7 @@ const styles = StyleSheet.create({
   drawerItemChat: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#007AFF',
+    backgroundColor: '#0077CC',
     paddingVertical: hp('1.5%'),
     paddingHorizontal: wp('5%'),
     borderRadius: wp('3%'),

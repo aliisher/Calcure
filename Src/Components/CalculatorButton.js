@@ -5,22 +5,34 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const CalculatorButton = React.memo(({ btn, onPress, getBtnStyle, isDark }) => (
-  <TouchableOpacity style={getBtnStyle(btn)} onPress={() => onPress(btn)}>
-    <Text
-      style={{
-        fontSize: wp('5.5%'),
-        fontWeight: '600',
-        color: ['+', '-', '*', '/', '=', '^'].includes(btn)
-          ? '#fff'
-          : isDark
-          ? '#fff'
-          : '#000',
-      }}
-    >
-      {btn}
-    </Text>
-  </TouchableOpacity>
-));
+const CalculatorButton = React.memo(
+  ({
+    btn,
+    onPress,
+    getBtnStyle,
+    isDark,
+  }: {
+    btn: string,
+    onPress: (btn: string) => void,
+    getBtnStyle: (btn: string) => any,
+    isDark: boolean,
+  }) => (
+    <TouchableOpacity style={getBtnStyle(btn)} onPress={() => onPress(btn)}>
+      <Text
+        style={{
+          fontSize: wp('5.5%'),
+          fontWeight: '600',
+          color: ['+', '-', '*', '/', '=', '^'].includes(btn)
+            ? '#fff'
+            : isDark
+            ? '#fff'
+            : '#000',
+        }}
+      >
+        {btn}
+      </Text>
+    </TouchableOpacity>
+  ),
+);
 
 export default CalculatorButton;

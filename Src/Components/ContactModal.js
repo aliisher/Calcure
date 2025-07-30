@@ -86,6 +86,7 @@ const ContactModal = ({ visible, onClose }) => {
                 keyboardType="email-address"
                 style={styles.input}
                 value={email}
+                underlineColorAndroid="transparent"
                 onChangeText={setEmail}
               />
 
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('2%'),
   },
   sendButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007FAF',
     paddingVertical: hp('1.5%'),
     borderRadius: wp('2.5%'),
     alignItems: 'center',

@@ -1,4 +1,4 @@
-package com.calcure
+package com.smartdigits.smartdigitscalculator
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
